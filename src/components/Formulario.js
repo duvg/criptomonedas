@@ -3,7 +3,7 @@ import axios from 'axios';
 import Criptomoneda from './Criptomoneda';
 import Error from './Error';
 
-function Formulario ({setMondea, setCriptomoneda}) {
+function Formulario ({setMoneda, setCriptomoneda}) {
     const [ criptomonedas, setCriptomonedas ] = useState([]);
     const [ modenaCotizar, setMonedaCotizar ] = useState('');
     const [ criptoCotizar, setCriptoCotizar ] = useState('');
@@ -38,7 +38,7 @@ function Formulario ({setMondea, setCriptomoneda}) {
 
         // Pasar los datos al componente principal
         setError(false);
-        setMondea(modenaCotizar);
+        setMoneda(modenaCotizar);
         setCriptomoneda(criptoCotizar);
     }
 

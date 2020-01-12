@@ -3,13 +3,15 @@ import imagen from './cryptomonedas.png';
 import Formulario from './components/Formulario';
 import axios from 'axios';
 import Spinner from'./components/Spinner';
+import Cotizacion from './components/Cotizacion';
 
 function App() {
 
   // State
-  const [ modena, setMondea ] = useState('');
+  const [ moneda, setMoneda ] = useState('');
   const [ criptomoneda, setCriptomoneda ] = useState('');
   const [ spinner, setSpinner ] = useState(false);
+  const [ resultado, setREsultado ] = useState({}); 
 
 
   // Consulta a la api
@@ -18,26 +20,29 @@ function App() {
       const cotizarCriptomoneda = async () => {
 
         // No realizar la llamada a la API si no hay moneda
-        if(modena === '') return null;
-        const url = `https://min-api.cryptocompare.com/data/pricemultifull?fsyms=${criptomoneda}&tsyms=${modena}`;
+        if(moneda === '') return null;
+        const url = `https://min-api.cryptocompare.com/data/pricemultifull?fsyms=${criptomoneda}&tsyms=${moneda}`;
 
         const resultado = await axios.get(url);
 
-        console.log(resultado);
-
+        // Mostrar el spinner
         setSpinner(true);
 
         setTimeout(() => {
+          // Ocultar el spinner
           setSpinner(false);
+          
+          // Guardar el resultado en el state
+          setREsultado(resultado.data.DISPLAY[criptomoneda][moneda]);
         }, 3000);
       }
 
       cotizarCriptomoneda();
-    }, [modena, criptomoneda]
+    }, [moneda, criptomoneda]
   );
 
   // Mostrar el spinner o el resultado
-  const componente = (spinner) ? <Spinner /> : null;
+  const componente = (spinner) ? <Spinner /> : <Cotizacion resultado={resultado} />;
 
   return (
     <div className="container">
@@ -49,7 +54,7 @@ function App() {
         <div className="one-half column">
           <h1>Cotiza criptomonedas al instante</h1>
           <Formulario 
-            setMondea={setMondea}
+            setMoneda={setMoneda}
             setCriptomoneda={setCriptomoneda}
           />
           {componente}
