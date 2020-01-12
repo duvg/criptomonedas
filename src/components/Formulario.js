@@ -3,7 +3,7 @@ import axios from 'axios';
 import Criptomoneda from './Criptomoneda';
 import Error from './Error';
 
-function Formulario () {
+function Formulario ({setMondea, setCriptomoneda}) {
     const [ criptomonedas, setCriptomonedas ] = useState([]);
     const [ modenaCotizar, setMonedaCotizar ] = useState('');
     const [ criptoCotizar, setCriptoCotizar ] = useState('');
@@ -38,6 +38,8 @@ function Formulario () {
 
         // Pasar los datos al componente principal
         setError(false);
+        setMondea(modenaCotizar);
+        setCriptomoneda(criptoCotizar);
     }
 
     // Mostrar el error en caso de no pasar la validación
@@ -59,7 +61,7 @@ function Formulario () {
                     <option value="">-- Elije tu moneda --</option>
                     <option value="USD">Dolar Estadounidense</option>
                     <option value="EUR">Euros</option>
-                    <option value="COL">Peso Colombiano</option>
+                    <option value="COP">Peso Colombiano</option>
                     <option value="MXN">Peso Mexicano</option>
                     <option value="GBP">Libras</option>
                 </select>
