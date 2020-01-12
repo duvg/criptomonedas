@@ -1,9 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Criptomoneda from './Criptomoneda';
+import Error from './Error';
 
 function Formulario () {
     const [ criptomonedas, setCriptomonedas ] = useState([]);
+    const [ modenaCotizar, setMonedaCotizar ] = useState('');
+    const [ criptoCotizar, setCriptoCotizar ] = useState('');
+    const [ error, setError ] = useState(false);
+
+
     useEffect(
         () => {
             // Llamada a la api de criptomonedas
@@ -20,13 +26,35 @@ function Formulario () {
         }, [] 
     );
 
+    // Validar los campos del formulario
+    const cotizarMoneda = e => {
+        e.preventDefault();
+        
+        if(modenaCotizar === '' || criptoCotizar === '') {
+            setError(true);
+            return;
+        }
+
+
+        // Pasar los datos al componente principal
+        setError(false);
+    }
+
+    // Mostrar el error en caso de no pasar la validación
+    const componente = (error) ? <Error mensaje="Ambos campos son obligatorios" /> : null;
+
     return (
-        <form>
+        <form
+            onSubmit={cotizarMoneda}
+        >
+            {componente}
+
             <div className="row">
                 <label htmlFor="moneda">Elije tu Moneda</label>
                 <select 
                     id="moneda"
                     className="u-full-width"
+                    onChange={ e => setMonedaCotizar(e.target.value) }
                 >
                     <option value="">-- Elije tu moneda --</option>
                     <option value="USD">Dolar Estadounidense</option>
@@ -42,6 +70,7 @@ function Formulario () {
                 <select 
                     id="criptomoneda"
                     className="u-full-width"
+                    onChange={ e => setCriptoCotizar(e.target.value) }
                 >
                     <option value="">-- Selecciona la criptomoneda --</option>
                     {criptomonedas.map(criptomoneda => (
@@ -52,6 +81,8 @@ function Formulario () {
                     ))}
                 </select>
             </div>
+
+            <input type="submit" className="button-primary u-full-width" value="Cotizar"/>
         </form>
     );
 }
