@@ -2,28 +2,42 @@ import React, { useState, useEffect } from 'react';
 import imagen from './cryptomonedas.png';
 import Formulario from './components/Formulario';
 import axios from 'axios';
+import Spinner from'./components/Spinner';
 
 function App() {
 
   // State
   const [ modena, setMondea ] = useState('');
   const [ criptomoneda, setCriptomoneda ] = useState('');
+  const [ spinner, setSpinner ] = useState(false);
 
 
   // Consulta a la api
   useEffect(
     () => {
       const cotizarCriptomoneda = async () => {
+
+        // No realizar la llamada a la API si no hay moneda
+        if(modena === '') return null;
         const url = `https://min-api.cryptocompare.com/data/pricemultifull?fsyms=${criptomoneda}&tsyms=${modena}`;
 
         const resultado = await axios.get(url);
 
         console.log(resultado);
+
+        setSpinner(true);
+
+        setTimeout(() => {
+          setSpinner(false);
+        }, 3000);
       }
 
       cotizarCriptomoneda();
     }, [modena, criptomoneda]
   );
+
+  // Mostrar el spinner o el resultado
+  const componente = (spinner) ? <Spinner /> : null;
 
   return (
     <div className="container">
@@ -38,6 +52,7 @@ function App() {
             setMondea={setMondea}
             setCriptomoneda={setCriptomoneda}
           />
+          {componente}
         </div>
       </div>
     </div>
